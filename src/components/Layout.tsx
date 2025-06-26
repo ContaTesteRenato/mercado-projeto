@@ -5,12 +5,14 @@ import {
   Home, 
   Package, 
   ShoppingCart, 
-  BarChart3, 
+  Users, 
   Settings,
   Menu,
-  X
+  X,
+  LogOut
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/hooks/useAuth';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -18,15 +20,19 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   const location = useLocation();
+  const { logout } = useAuth();
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
   const navigation = [
     { name: 'Dashboard', href: '/', icon: Home },
+    { name: 'Clientes', href: '/clients', icon: Users },
     { name: 'Produtos', href: '/products', icon: Package },
-    { name: 'Vendas', href: '/sales', icon: ShoppingCart },
-    { name: 'Relatórios', href: '/reports', icon: BarChart3 },
-    { name: 'Configurações', href: '/settings', icon: Settings },
+    { name: 'Pedidos', href: '/orders', icon: ShoppingCart },
   ];
+
+  const handleLogout = () => {
+    logout();
+  };
 
   return (
     <div className="min-h-screen flex bg-gray-50">
@@ -59,7 +65,7 @@ const Layout = ({ children }: LayoutProps) => {
           </Button>
         </div>
         
-        <nav className="mt-6 px-3">
+        <nav className="mt-6 px-3 flex-1">
           {navigation.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.href;
@@ -83,6 +89,18 @@ const Layout = ({ children }: LayoutProps) => {
             );
           })}
         </nav>
+
+        {/* Logout button */}
+        <div className="p-3 border-t border-gray-200">
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-gray-600 hover:text-red-600 hover:bg-red-50"
+            onClick={handleLogout}
+          >
+            <LogOut className="mr-3 h-5 w-5" />
+            Sair
+          </Button>
+        </div>
       </div>
 
       {/* Main content */}
